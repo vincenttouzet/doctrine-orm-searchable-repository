@@ -9,13 +9,24 @@ $filters = [
     'rating'      => ['gte' => 4],
 ];
 
+$orders = [
+    'author.name' => 'ASC',
+    'name'        => 'DESC',
+];
+
 $entities = $repository->search($filters, $orders);
 ```
 
 
 ## How to use
 
-Just make your repository class extends `SAF\SearchableRepository\SearchableRepository`.
+Install using composer
+
+```
+composer require saf/doctrine-orm-searchable-repository
+```
+
+And just make your repository class extends `SAF\SearchableRepository\SearchableRepository`.
 
 ```php
 
