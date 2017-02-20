@@ -1,0 +1,35 @@
+Tests\SAF\SearchableRepository\Entity\Author:
+    lewis_carroll:
+        firstName: Lewis
+        lastName: Carroll
+    author{2..10}:
+        firstName: <firstName()>
+        lastName: <lastName()>
+
+Tests\SAF\SearchableRepository\Entity\Type:
+    novel:
+        name: Novel
+    biography:
+        name: Biography
+    documentary:
+        name: Documentary
+
+Tests\SAF\SearchableRepository\Entity\Book:
+    alice_in_wonderland:
+        name: 'Alice in wonderland'
+        author: '@lewis_carroll'
+    book{2..10}:
+        name: 'Book : <name()>'
+        author: '@author*'
+    # a book with 50 sales
+    book11:
+        name: 'Book : <name()>'
+        nbSales: 50
+    # 9 books with less than 50 sales
+    book{12..20}:
+        name: 'Book : <name()>'
+        nbSales: <numberBetween(1, 49)>
+    # 10 books with more than 50 sales
+    book{21..30}:
+        name: 'Book : <name()>'
+        nbSales: <numberBetween(51, 100)>

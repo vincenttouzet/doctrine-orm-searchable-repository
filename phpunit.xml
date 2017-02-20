@@ -1,0 +1,17 @@
+<phpunit
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.5/phpunit.xsd"
+    bootstrap="./tests/bootstrap.php">
+
+    <testsuites>
+        <testsuite name="doctrine-orm-searchable-repository Test suite">
+            <directory>./tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>./lib</directory>
+        </whitelist>
+    </filter>
+</phpunit>
