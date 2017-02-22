@@ -136,15 +136,27 @@ class SearchableRepository extends EntityRepository
                 )
             );
         } else {
-            // check if field exist
-            if (!$classMetadata->hasField($field)) {
-                throw new FieldNotFoundException($classMetadata->getName(), $field);
+            // check if field or association exist
+            if (!$classMetadata->hasField($field) && !$classMetadata->hasAssociation($field)) {
+                if (!$classMetadata->hasField($field)) {
+                    throw new FieldNotFoundException($classMetadata->getName(), $field);
+                }
+                if (!$classMetadata->hasAssociation($field)) {
+                    throw new AsNotFoundException($classMetadata->getName(), $field);
+                }
             }
             // add field mapping
-            $fieldMappings[$previous.'.'.$field] = [
-                'mapping' => $classMetadata->getFieldMapping($field),
-                'queryAlias' => str_replace('.', '_', $previous).'.'.$field
-            ];
+            if ($classMetadata->hasField($field)) {
+                $fieldMappings[$previous.'.'.$field] = [
+                    'mapping' => $classMetadata->getFieldMapping($field),
+                    'queryAlias' => str_replace('.', '_', $previous).'.'.$field
+                ];
+            } elseif ($classMetadata->hasAssociation($field)) {
+                $fieldMappings[$previous.'.'.$field] = [
+                    'mapping' => $classMetadata->getAssociationMapping($field),
+                    'queryAlias' => str_replace('.', '_', $previous).'.'.$field
+                ];
+            }
         }
 
         return $fieldMappings;
