@@ -11,10 +11,10 @@
 
 namespace SAF\SearchableRepository\Exception;
 
-class FieldNotFoundException extends \Exception
+class FieldOrAssociationNotFoundException extends \Exception
 {
     public function __construct($entityName, $fieldName)
     {
-        parent::__construct(sprintf('The entity "%s" has no field named "%s".', $entityName, $fieldName));
+        parent::__construct(sprintf('The entity "%s" has no field or association named "%s".', $entityName, $fieldName));
     }
 }

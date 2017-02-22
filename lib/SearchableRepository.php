@@ -17,8 +17,9 @@ use Doctrine\ORM\Mapping;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\QueryBuilder;
 use SAF\SearchableRepository\Exception\AssociationNotFoundException;
-use SAF\SearchableRepository\Exception\FieldNotFoundException;
+use SAF\SearchableRepository\Exception\FieldOrAssociationNotFoundException;
 use SAF\SearchableRepository\Types\GenericType;
+use SAF\SearchableRepository\Types\StringType;
 use SAF\SearchableRepository\Types\TypeInterface;
 
 class SearchableRepository extends EntityRepository
@@ -38,6 +39,8 @@ class SearchableRepository extends EntityRepository
     public function init()
     {
         $this->defaultType = new GenericType();
+        $this->setType('string', new StringType());
+        $this->setType('text', new StringType());
     }
 
     /**
@@ -108,7 +111,7 @@ class SearchableRepository extends EntityRepository
      * @param string $previous
      * @return array
      * @throws AssociationNotFoundException
-     * @throws FieldNotFoundException
+     * @throws FieldOrAssociationNotFoundException
      */
     protected function getFieldMappings(QueryBuilder $queryBuilder, $field, ClassMetadataInfo $classMetadata, $previous = 'main')
     {
@@ -137,14 +140,6 @@ class SearchableRepository extends EntityRepository
             );
         } else {
             // check if field or association exist
-            if (!$classMetadata->hasField($field) && !$classMetadata->hasAssociation($field)) {
-                if (!$classMetadata->hasField($field)) {
-                    throw new FieldNotFoundException($classMetadata->getName(), $field);
-                }
-                if (!$classMetadata->hasAssociation($field)) {
-                    throw new AsNotFoundException($classMetadata->getName(), $field);
-                }
-            }
             // add field mapping
             if ($classMetadata->hasField($field)) {
                 $fieldMappings[$previous.'.'.$field] = [
@@ -156,6 +151,8 @@ class SearchableRepository extends EntityRepository
                     'mapping' => $classMetadata->getAssociationMapping($field),
                     'queryAlias' => str_replace('.', '_', $previous).'.'.$field
                 ];
+            } else {
+                throw new FieldOrAssociationNotFoundException($classMetadata->getName(), $field);
             }
         }
 

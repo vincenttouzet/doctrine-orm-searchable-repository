@@ -29,9 +29,9 @@ class SearchRepositoryTest extends AbstractTest
     }
 
     /**
-     * @expectedException \SAF\SearchableRepository\Exception\FieldNotFoundException
+     * @expectedException \SAF\SearchableRepository\Exception\FieldOrAssociationNotFoundException
      */
-    public function testFieldNotFoundException()
+    public function testFieldOrAssociationNotFoundException()
     {
         $repository = $this->getEntityRepository(Book::class);
 
