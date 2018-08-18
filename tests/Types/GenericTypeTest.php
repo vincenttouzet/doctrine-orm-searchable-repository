@@ -110,6 +110,17 @@ class GenericTypeTest extends AbstractTest
         $this->assertEquals(11, count($books), 'There must be 11 books with more than or 50 sales');
     }
 
+    public function testBetweenCondition()
+    {
+        $repository = $this->getEntityRepository(Book::class);
+
+        $books = $repository->search([
+            'nbSales' => ['between' => [25, 49]],
+        ]);
+
+        $this->assertEquals(4, count($books), 'There must be 4 books with nb sales between 25 and 49');
+    }
+
     public function testNullCondition()
     {
         $repository = $this->getEntityRepository(Book::class);

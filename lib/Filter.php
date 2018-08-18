@@ -19,6 +19,7 @@ final class Filter
     const CONDITION_GT = 'gt';
     const CONDITION_LTE = 'lte';
     const CONDITION_GTE = 'gte';
+    const CONDITION_BETWEEN = 'between';
     const CONDITION_LIKE = 'like';
     const CONDITION_NOT_LIKE = 'not_like';
     const CONDITION_NULL = 'null';
