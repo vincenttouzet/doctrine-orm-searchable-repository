@@ -24,8 +24,8 @@ class GenericTypeTest extends AbstractTest
         $repository = $this->getEntityRepository(Author::class);
 
         $authors = $repository->search([
-            'firstName' => ['eq' => 'Lewis'],
-            'lastName' => ['eq' => 'Carroll'],
+            'firstName' => [Filter::CONDITION_EQ => 'Lewis'],
+            'lastName' => [Filter::CONDITION_EQ => 'Carroll'],
         ]);
 
         $this->assertEquals(1, count($authors), 'There must be 1 author named "Lewis Carroll"');
@@ -36,8 +36,8 @@ class GenericTypeTest extends AbstractTest
         $repository = $this->getEntityRepository(Author::class);
 
         $authors = $repository->search([
-            'firstName' => ['neq' => 'Lewis'],
-            'lastName' => ['neq' => 'Carroll'],
+            'firstName' => [Filter::CONDITION_NEQ => 'Lewis'],
+            'lastName' => [Filter::CONDITION_NEQ => 'Carroll'],
         ]);
 
         $this->assertEquals(10, count($authors), 'There must be 10 author not named "Lewis Carroll"');
@@ -48,11 +48,10 @@ class GenericTypeTest extends AbstractTest
         $repository = $this->getEntityRepository(Author::class);
 
         $authors = $repository->search([
-            'firstName' => ['like' => 'Lew%'],
-            'lastName' => ['like' => 'Car%ll'],
+            'birthDate' => [Filter::CONDITION_LIKE => '1832%'],
         ]);
 
-        $this->assertEquals(1, count($authors), 'There must be 1 author named "Lewis Carroll"');
+        $this->assertEquals(1, count($authors), 'There must be 1 author birth in 1832');
     }
 
     public function testNotLikeCondition()
@@ -60,10 +59,10 @@ class GenericTypeTest extends AbstractTest
         $repository = $this->getEntityRepository(Author::class);
 
         $authors = $repository->search([
-            'lastName' => ['not_like' => 'Car%ll'],
+            'birthDate' => [Filter::CONDITION_NOT_LIKE => '1832%'],
         ]);
 
-        $this->assertEquals(10, count($authors), 'There must be 10 author not named "Lewis Carroll"');
+        $this->assertEquals(10, count($authors), 'There must be 10 author not birth on 1832');
     }
 
     public function testContains()
@@ -71,7 +70,7 @@ class GenericTypeTest extends AbstractTest
         $repository = $this->getEntityRepository(Type::class);
 
         $types = $repository->search([
-            'name' => ['contains' => 'e'],
+            'name' => [Filter::CONDITION_CONTAINS => 'e'],
         ]);
 
         $this->assertEquals(2, count($types), 'There must be 2 types with an "e" in their name');
@@ -82,7 +81,7 @@ class GenericTypeTest extends AbstractTest
         $repository = $this->getEntityRepository(Type::class);
 
         $types = $repository->search([
-            'name' => ['not_contains' => 'a'],
+            'name' => [Filter::CONDITION_NOT_CONTAINS => 'a'],
         ]);
 
         $this->assertEquals(1, count($types), 'There must be 1 type with no "a" in their name');
@@ -137,7 +136,7 @@ class GenericTypeTest extends AbstractTest
         $repository = $this->getEntityRepository(Book::class);
 
         $books = $repository->search([
-            'nbSales' => ['lt' => 50],
+            'nbSales' => [Filter::CONDITION_LT => 50],
         ]);
 
         $this->assertEquals(9, count($books), 'There must be 9 books with less than 50 sales');
@@ -148,7 +147,7 @@ class GenericTypeTest extends AbstractTest
         $repository = $this->getEntityRepository(Book::class);
 
         $books = $repository->search([
-            'nbSales' => ['lte' => 50],
+            'nbSales' => [Filter::CONDITION_LTE => 50],
         ]);
 
         $this->assertEquals(10, count($books), 'There must be 10 books with less than or 50 sales');
@@ -159,7 +158,7 @@ class GenericTypeTest extends AbstractTest
         $repository = $this->getEntityRepository(Book::class);
 
         $books = $repository->search([
-            'nbSales' => ['gt' => 50],
+            'nbSales' => [Filter::CONDITION_GT => 50],
         ]);
 
         $this->assertEquals(10, count($books), 'There must be 10 books with more than 50 sales');
@@ -170,7 +169,7 @@ class GenericTypeTest extends AbstractTest
         $repository = $this->getEntityRepository(Book::class);
 
         $books = $repository->search([
-            'nbSales' => ['gte' => 50],
+            'nbSales' => [Filter::CONDITION_GTE => 50],
         ]);
 
         $this->assertEquals(11, count($books), 'There must be 11 books with more than or 50 sales');
@@ -181,7 +180,7 @@ class GenericTypeTest extends AbstractTest
         $repository = $this->getEntityRepository(Book::class);
 
         $books = $repository->search([
-            'nbSales' => ['between' => [25, 49]],
+            'nbSales' => [Filter::CONDITION_BETWEEN => [25, 49]],
         ]);
 
         $this->assertEquals(4, count($books), 'There must be 4 books with nb sales between 25 and 49');
@@ -195,7 +194,7 @@ class GenericTypeTest extends AbstractTest
         $repository = $this->getEntityRepository(Book::class);
 
         $repository->search([
-            'nbSales' => ['between' => 25],
+            'nbSales' => [Filter::CONDITION_BETWEEN => 25],
         ]);
     }
 
@@ -207,7 +206,7 @@ class GenericTypeTest extends AbstractTest
         $repository = $this->getEntityRepository(Book::class);
 
         $repository->search([
-            'nbSales' => ['between' => [25]],
+            'nbSales' => [Filter::CONDITION_BETWEEN => [25]],
         ]);
     }
 
@@ -219,7 +218,7 @@ class GenericTypeTest extends AbstractTest
         $repository = $this->getEntityRepository(Book::class);
 
         $repository->search([
-            'nbSales' => ['between' => [15, 20, 25]],
+            'nbSales' => [Filter::CONDITION_BETWEEN => [15, 20, 25]],
         ]);
     }
 
@@ -228,13 +227,13 @@ class GenericTypeTest extends AbstractTest
         $repository = $this->getEntityRepository(Book::class);
 
         $books = $repository->search([
-            'nbSales' => ['null' => true],
+            'nbSales' => [Filter::CONDITION_NULL => true],
         ]);
 
         $this->assertEquals(10, count($books), 'There must be 10 books with sales set to null');
 
         $books = $repository->search([
-            'nbSales' => ['null' => false],
+            'nbSales' => [Filter::CONDITION_NULL => false],
         ]);
 
         $this->assertEquals(20, count($books), 'There must be 20 books with sales not set to null');
@@ -245,13 +244,13 @@ class GenericTypeTest extends AbstractTest
         $repository = $this->getEntityRepository(Book::class);
 
         $books = $repository->search([
-            'nbSales' => ['not_null' => true],
+            'nbSales' => [Filter::CONDITION_NOT_NULL => true],
         ]);
 
         $this->assertEquals(20, count($books), 'There must be 20 books with sales not set to null');
 
         $books = $repository->search([
-            'nbSales' => ['not_null' => false],
+            'nbSales' => [Filter::CONDITION_NOT_NULL => false],
         ]);
 
         $this->assertEquals(10, count($books), 'There must be 10 books with sales set to null');
@@ -263,7 +262,7 @@ class GenericTypeTest extends AbstractTest
 
         $typeNames = ['Novel', 'Biography'];
         $types = $repository->search([
-            'name' => ['in' => $typeNames],
+            'name' => [Filter::CONDITION_IN => $typeNames],
         ]);
 
         $this->assertEquals(2, count($types), sprintf('There must be 2 types in [%s]', implode(', ', $typeNames)));
@@ -275,7 +274,7 @@ class GenericTypeTest extends AbstractTest
 
         $typeNames = ['Novel', 'Biography'];
         $types = $repository->search([
-            'name' => ['not_in' => $typeNames],
+            'name' => [Filter::CONDITION_NOT_IN => $typeNames],
         ]);
 
         $this->assertEquals(1, count($types), sprintf('There must be 1 types not in [%s]', implode(', ', $typeNames)));
@@ -283,28 +282,28 @@ class GenericTypeTest extends AbstractTest
 
     public function testOrderByASC()
     {
-        $repository = $this->getEntityRepository(Type::class);
-
-        $types = $repository->search([], [
-            'name' => 'ASC',
-        ]);
-
-        $this->assertEquals('Biography', $types[0]->getName(), 'First type must be Biography');
-        $this->assertEquals('Documentary', $types[1]->getName(), 'Second type must be Documentary');
-        $this->assertEquals('Novel', $types[2]->getName(), 'Third type must be Novel');
+        $repository = $this->getEntityRepository(Book::class);
+        /** @var Book[] $books */
+        $books = $repository->search([], ['nbSales' => 'ASC']);
+        $last = PHP_INT_MIN;
+        foreach ($books as $book) {
+            if ($book->getNbSales()) {
+                $this->assertGreaterThanOrEqual($last, $book->getNbSales());
+            }
+        }
     }
 
     public function testOrderByDESC()
     {
-        $repository = $this->getEntityRepository(Type::class);
-
-        $types = $repository->search([], [
-            'name' => 'DESC',
-        ]);
-
-        $this->assertEquals('Novel', $types[0]->getName(), 'First type must be Novel');
-        $this->assertEquals('Documentary', $types[1]->getName(), 'Second type must be Documentary');
-        $this->assertEquals('Biography', $types[2]->getName(), 'Third type must be Biography');
+        $repository = $this->getEntityRepository(Book::class);
+        /** @var Book[] $books */
+        $books = $repository->search([], ['nbSales' => 'ASC']);
+        $last = PHP_INT_MAX;
+        foreach ($books as $book) {
+            if ($book->getNbSales()) {
+                $this->assertLessThanOrEqual($last, $book->getNbSales());
+            }
+        }
     }
 
     /**

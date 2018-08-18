@@ -2,12 +2,15 @@ Tests\SAF\SearchableRepository\Entity\Author:
     lewis_carroll:
         firstName: Lewis
         lastName: Carroll
+        birthDate: <dateTimeBetween('1832-01-27', '1832-01-27')>
     author{2..10}:
         firstName: <firstName()>
         lastName: <lastName()>
+        birthDate: <dateTimeBetween('-30 days', 'now')>
     roy_lewis:
         firstName: Roy
         lastName: Lewis
+        birthDate: <dateTimeBetween('1913-11-09', '1913-11-09')>
 
 Tests\SAF\SearchableRepository\Entity\Type:
     novel:
