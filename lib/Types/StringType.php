@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the Multitud project.
+ * This file is part of the doctrine-orm-searchable-repository project.
  *
- * (c) Vincent Touzet <vincent.touzet@dotsafe.fr>
+ * (c) Vincent Touzet <vincent.touzet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -22,10 +22,12 @@ class StringType extends GenericType
         switch ($condition) {
             case 'like':
                 $queryBuilder->setParameter($parameter, $value);
+
                 return $expr->like($expr->lower($field), $expr->lower($parameter));
                 break;
             case 'not_like':
                 $queryBuilder->setParameter($parameter, $value);
+
                 return $expr->notLike($expr->lower($field), $expr->lower($parameter));
                 break;
             default:
@@ -38,5 +40,4 @@ class StringType extends GenericType
         $expr = $queryBuilder->expr();
         $queryBuilder->addOrderBy($expr->lower($field), $order);
     }
-
 }

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the doctrine-orm-searchable-repository package.
+ * This file is part of the doctrine-orm-searchable-repository project.
  *
  * (c) Vincent Touzet <vincent.touzet@gmail.com>
  *
@@ -10,8 +10,6 @@
  */
 
 namespace SAF\SearchableRepository\Exception;
-
-use Exception;
 
 class ConditionNotSupportedException extends \Exception
 {

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the doctrine-orm-searchable-repository package.
+ * This file is part of the doctrine-orm-searchable-repository project.
  *
  * (c) Vincent Touzet <vincent.touzet@gmail.com>
  *
@@ -17,9 +17,9 @@ interface TypeInterface
 {
     /**
      * @param QueryBuilder $queryBuilder
-     * @param string $field
-     * @param string $condition
-     * @param mixed $value
+     * @param string       $field
+     * @param string       $condition
+     * @param mixed        $value
      *
      * @return mixed
      */
@@ -27,8 +27,8 @@ interface TypeInterface
 
     /**
      * @param QueryBuilder $queryBuilder
-     * @param string $field
-     * @param string $order
+     * @param string       $field
+     * @param string       $order
      */
     public function addOrder(QueryBuilder $queryBuilder, $field, $order);
 }

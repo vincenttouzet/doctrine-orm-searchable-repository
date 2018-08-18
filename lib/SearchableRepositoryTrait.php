@@ -3,7 +3,7 @@
 /*
  * This file is part of the doctrine-orm-searchable-repository project.
  *
- * (c) Vincent Touzet <vincent.touzet@dotsafe.fr>
+ * (c) Vincent Touzet <vincent.touzet@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -35,12 +35,13 @@ trait SearchableRepositoryTrait
     }
 
     /**
-     * Process a search on the repository
+     * Process a search on the repository.
      *
      * @param array $filters
      * @param array $orders
      *
      * @return mixed
+     *
      * @throws AssociationNotFoundException
      * @throws FieldOrAssociationNotFoundException
      * @throws \Doctrine\ORM\Mapping\MappingException
@@ -55,6 +56,7 @@ trait SearchableRepositoryTrait
      * @param array $orders
      *
      * @return \Doctrine\ORM\QueryBuilder
+     *
      * @throws AssociationNotFoundException
      * @throws FieldOrAssociationNotFoundException
      * @throws \Doctrine\ORM\Mapping\MappingException
@@ -98,12 +100,12 @@ trait SearchableRepositoryTrait
             if (is_array($field)) {
                 $expr = $queryBuilder->expr()->orX();
                 foreach ($field as $f) {
-                    $fieldMapping = isset($fieldMappings[$f]) ? $fieldMappings[$f] : $fieldMappings['main.' . $f];
+                    $fieldMapping = isset($fieldMappings[$f]) ? $fieldMappings[$f] : $fieldMappings['main.'.$f];
                     $type = $this->getType($fieldMapping['mapping']['type']);
                     $expr->add($type->addFilter($queryBuilder, $fieldMapping['queryAlias'], $filterCondition, $filterValue));
                 }
             } else {
-                $fieldMapping = isset($fieldMappings[$field]) ? $fieldMappings[$field] : $fieldMappings['main.' . $field];
+                $fieldMapping = isset($fieldMappings[$field]) ? $fieldMappings[$field] : $fieldMappings['main.'.$field];
                 $type = $this->getType($fieldMapping['mapping']['type']);
                 $expr = $type->addFilter($queryBuilder, $fieldMapping['queryAlias'], $filterCondition, $filterValue);
             }
@@ -112,7 +114,7 @@ trait SearchableRepositoryTrait
 
         // orders
         foreach ($orders as $field => $order) {
-            $fieldMapping = isset($fieldMappings[$field]) ? $fieldMappings[$field] : $fieldMappings['main.' . $field];
+            $fieldMapping = isset($fieldMappings[$field]) ? $fieldMappings[$field] : $fieldMappings['main.'.$field];
             $type = $this->getType($fieldMapping['mapping']['type']);
             $type->addOrder($queryBuilder, $fieldMapping['queryAlias'], $order);
         }
@@ -123,6 +125,7 @@ trait SearchableRepositoryTrait
     /**
      * @param array $filters
      * @param array $orders
+     *
      * @return array|int|string
      */
     protected function getFields(array $filters = [], array $orders = [])
@@ -138,12 +141,13 @@ trait SearchableRepositoryTrait
     }
 
     /**
-     * @param QueryBuilder $queryBuilder
+     * @param QueryBuilder      $queryBuilder
      * @param                   $field
      * @param ClassMetadataInfo $classMetadata
-     * @param string $previous
+     * @param string            $previous
      *
      * @return array
+     *
      * @throws AssociationNotFoundException
      * @throws FieldOrAssociationNotFoundException
      * @throws \Doctrine\ORM\Mapping\MappingException
@@ -158,9 +162,10 @@ trait SearchableRepositoryTrait
                     $this->getFieldMappings($queryBuilder, $f, $classMetadata, $previous)
                 );
             }
+
             return $fieldMappings;
         }
-        if (strstr($field, '.') !== false) {
+        if (false !== strstr($field, '.')) {
             $parts = explode('.', $field);
             $associationName = array_shift($parts);
             $associationField = implode('.', $parts);
@@ -168,8 +173,8 @@ trait SearchableRepositoryTrait
                 throw new AssociationNotFoundException($classMetadata->getName(), $associationName);
             }
             // add join if not already
-            if (!$this->hasJoinInQueryBuilder($queryBuilder, $previous . '_' . $associationName, $previous)) {
-                $queryBuilder->innerJoin($previous . '.' . $associationName, $previous . '_' . $associationName);
+            if (!$this->hasJoinInQueryBuilder($queryBuilder, $previous.'_'.$associationName, $previous)) {
+                $queryBuilder->innerJoin($previous.'.'.$associationName, $previous.'_'.$associationName);
             }
             $association = $classMetadata->getAssociationMapping($associationName);
             $associationClassMetadata = $this->getEntityManager()->getClassMetadata($association['targetEntity']);
@@ -179,21 +184,21 @@ trait SearchableRepositoryTrait
                     $queryBuilder,
                     $associationField,
                     $associationClassMetadata,
-                    $previous . '.' . $associationName
+                    $previous.'.'.$associationName
                 )
             );
         } else {
             // check if field or association exist
             // add field mapping
             if ($classMetadata->hasField($field)) {
-                $fieldMappings[$previous . '.' . $field] = [
+                $fieldMappings[$previous.'.'.$field] = [
                     'mapping' => $classMetadata->getFieldMapping($field),
-                    'queryAlias' => str_replace('.', '_', $previous) . '.' . $field,
+                    'queryAlias' => str_replace('.', '_', $previous).'.'.$field,
                 ];
             } elseif ($classMetadata->hasAssociation($field)) {
-                $fieldMappings[$previous . '.' . $field] = [
+                $fieldMappings[$previous.'.'.$field] = [
                     'mapping' => $classMetadata->getAssociationMapping($field),
-                    'queryAlias' => str_replace('.', '_', $previous) . '.' . $field,
+                    'queryAlias' => str_replace('.', '_', $previous).'.'.$field,
                 ];
             } else {
                 throw new FieldOrAssociationNotFoundException($classMetadata->getName(), $field);
@@ -205,8 +210,8 @@ trait SearchableRepositoryTrait
 
     /**
      * @param QueryBuilder $queryBuilder
-     * @param string $alias Alias of the join (e.g: main_author)
-     * @param string $entityAlias Alias of the entity (e.g: main)
+     * @param string       $alias        Alias of the join (e.g: main_author)
+     * @param string       $entityAlias  Alias of the entity (e.g: main)
      *
      * @return bool
      */
@@ -227,7 +232,7 @@ trait SearchableRepositoryTrait
     }
 
     /**
-     * @param string $name
+     * @param string        $name
      * @param TypeInterface $type
      *
      * @return $this

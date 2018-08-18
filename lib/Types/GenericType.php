@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the doctrine-orm-searchable-repository package.
+ * This file is part of the doctrine-orm-searchable-repository project.
  *
  * (c) Vincent Touzet <vincent.touzet@gmail.com>
  *
@@ -18,10 +18,12 @@ class GenericType implements TypeInterface
 {
     /**
      * @param QueryBuilder $queryBuilder
-     * @param string $field
-     * @param string $condition
-     * @param mixed $value
+     * @param string       $field
+     * @param string       $condition
+     * @param mixed        $value
+     *
      * @return mixed
+     *
      * @throws ConditionNotSupportedException
      */
     public function addFilter(QueryBuilder $queryBuilder, $field, $condition, $value)
@@ -31,34 +33,42 @@ class GenericType implements TypeInterface
         switch ($condition) {
             case 'eq':
                 $queryBuilder->setParameter($parameter, $value);
+
                 return $expr->eq($field, $parameter);
                 break;
             case 'neq':
                 $queryBuilder->setParameter($parameter, $value);
+
                 return $expr->neq($field, $parameter);
                 break;
             case 'lt':
                 $queryBuilder->setParameter($parameter, $value);
+
                 return $expr->lt($field, $parameter);
                 break;
             case 'gt':
                 $queryBuilder->setParameter($parameter, $value);
+
                 return $expr->gt($field, $parameter);
                 break;
             case 'lte':
                 $queryBuilder->setParameter($parameter, $value);
+
                 return $expr->lte($field, $parameter);
                 break;
             case 'gte':
                 $queryBuilder->setParameter($parameter, $value);
+
                 return $expr->gte($field, $parameter);
                 break;
             case 'like':
                 $queryBuilder->setParameter($parameter, $value);
+
                 return $expr->like($field, $parameter);
                 break;
             case 'not_like':
                 $queryBuilder->setParameter($parameter, $value);
+
                 return $expr->notLike($field, $parameter);
                 break;
             case 'null':
@@ -77,10 +87,12 @@ class GenericType implements TypeInterface
                 break;
             case 'in':
                 $queryBuilder->setParameter($parameter, $value);
+
                 return $expr->in($field, $parameter);
                 break;
             case 'not_in':
                 $queryBuilder->setParameter($parameter, $value);
+
                 return $expr->notIn($field, $parameter);
                 break;
             default:

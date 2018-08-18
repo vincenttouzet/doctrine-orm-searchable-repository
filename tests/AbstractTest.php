@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the doctrine-orm-searchable-repository package.
+ * This file is part of the doctrine-orm-searchable-repository project.
  *
  * (c) Vincent Touzet <vincent.touzet@gmail.com>
  *
@@ -17,7 +17,6 @@ use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\Setup;
 use Nelmio\Alice\Loader\NativeLoader;
 use SAF\SearchableRepository\SearchableRepository;
-use Tests\SAF\SearchableRepository\Entity\Author;
 
 abstract class AbstractTest extends \PHPUnit_Framework_TestCase
 {
@@ -54,6 +53,7 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param $class
+     *
      * @return SearchableRepository
      */
     protected function getEntityRepository($class)

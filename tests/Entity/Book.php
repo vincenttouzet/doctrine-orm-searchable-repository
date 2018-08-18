@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the doctrine-orm-searchable-repository package.
+ * This file is part of the doctrine-orm-searchable-repository project.
  *
  * (c) Vincent Touzet <vincent.touzet@gmail.com>
  *
@@ -14,7 +14,7 @@ namespace Tests\SAF\SearchableRepository\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class Book
+ * Class Book.
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Tests\SAF\SearchableRepository\Entity\Repository\PostRepository")
@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Book
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id()
@@ -59,7 +59,7 @@ class Book
     protected $author;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(type="integer", nullable=true)
      */

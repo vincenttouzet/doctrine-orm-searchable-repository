@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the doctrine-orm-searchable-repository package.
+ * This file is part of the doctrine-orm-searchable-repository project.
  *
  * (c) Vincent Touzet <vincent.touzet@gmail.com>
  *
@@ -10,7 +10,6 @@
  */
 
 namespace Tests\SAF\SearchableRepository;
-
 
 use Tests\SAF\SearchableRepository\Entity\Author;
 use Tests\SAF\SearchableRepository\Entity\Book;
