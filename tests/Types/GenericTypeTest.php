@@ -11,6 +11,7 @@
 
 namespace Tests\SAF\SearchableRepository\Types;
 
+use SAF\SearchableRepository\Filter;
 use Tests\SAF\SearchableRepository\AbstractTest;
 use Tests\SAF\SearchableRepository\Entity\Author;
 use Tests\SAF\SearchableRepository\Entity\Book;
@@ -59,11 +60,76 @@ class GenericTypeTest extends AbstractTest
         $repository = $this->getEntityRepository(Author::class);
 
         $authors = $repository->search([
-            'firstName' => ['not_like' => 'Lew%'],
             'lastName' => ['not_like' => 'Car%ll'],
         ]);
 
         $this->assertEquals(10, count($authors), 'There must be 10 author not named "Lewis Carroll"');
+    }
+
+    public function testContains()
+    {
+        $repository = $this->getEntityRepository(Type::class);
+
+        $types = $repository->search([
+            'name' => ['contains' => 'e'],
+        ]);
+
+        $this->assertEquals(2, count($types), 'There must be 2 types with an "e" in their name');
+    }
+
+    public function testNotContains()
+    {
+        $repository = $this->getEntityRepository(Type::class);
+
+        $types = $repository->search([
+            'name' => ['not_contains' => 'a'],
+        ]);
+
+        $this->assertEquals(1, count($types), 'There must be 1 type with no "a" in their name');
+    }
+
+    public function testStarsWith()
+    {
+        $repository = $this->getEntityRepository(Type::class);
+
+        $types = $repository->search([
+            'name' => [Filter::CONDITION_STARTS_WITH => 'No'],
+        ]);
+
+        $this->assertEquals(1, count($types), 'There must be 1 type starting with No');
+    }
+
+    public function testNotStarsWith()
+    {
+        $repository = $this->getEntityRepository(Type::class);
+
+        $types = $repository->search([
+            'name' => [Filter::CONDITION_NOT_STARTS_WITH => 'No'],
+        ]);
+
+        $this->assertEquals(2, count($types), 'There must be 2 type not starting with No');
+    }
+
+    public function testEndsWith()
+    {
+        $repository = $this->getEntityRepository(Type::class);
+
+        $types = $repository->search([
+            'name' => [Filter::CONDITION_ENDS_WITH => 'phy'],
+        ]);
+
+        $this->assertEquals(1, count($types), 'There must be 1 type starting with No');
+    }
+
+    public function testNotEndsWith()
+    {
+        $repository = $this->getEntityRepository(Type::class);
+
+        $types = $repository->search([
+            'name' => [Filter::CONDITION_NOT_ENDS_WITH => 'phy'],
+        ]);
+
+        $this->assertEquals(2, count($types), 'There must be 2 type not starting with No');
     }
 
     public function testLtCondition()
@@ -119,6 +185,42 @@ class GenericTypeTest extends AbstractTest
         ]);
 
         $this->assertEquals(4, count($books), 'There must be 4 books with nb sales between 25 and 49');
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testBetweenConditionExceptionType()
+    {
+        $repository = $this->getEntityRepository(Book::class);
+
+        $repository->search([
+            'nbSales' => ['between' => 25],
+        ]);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testBetweenConditionExceptionNotEnough()
+    {
+        $repository = $this->getEntityRepository(Book::class);
+
+        $repository->search([
+            'nbSales' => ['between' => [25]],
+        ]);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testBetweenConditionExceptionTooMuch()
+    {
+        $repository = $this->getEntityRepository(Book::class);
+
+        $repository->search([
+            'nbSales' => ['between' => [15, 20, 25]],
+        ]);
     }
 
     public function testNullCondition()

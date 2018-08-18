@@ -31,7 +31,7 @@ Tests\SAF\SearchableRepository\Entity\Book:
     # 9 books with less than 50 sales
     book{12..16}:
         name: 'Book : <name()>'
-        nbSales: <numberBetween(1, 25)>
+        nbSales: <numberBetween(1, 24)>
     book{17..20}:
         name: 'Book : <name()>'
         nbSales: <numberBetween(25, 49)>

@@ -66,6 +66,9 @@ class GenericType implements TypeInterface
                 if (!is_array($value) && !$value instanceof \Traversable) {
                     throw new \InvalidArgumentException('You must pass an array as value with the between condition.');
                 }
+                if (2 !== count($value)) {
+                    throw new \InvalidArgumentException('The value for between condition must have exactly 2 values.');
+                }
                 $and = $expr->andX();
                 reset($value);
                 $and->add($this->addFilter($queryBuilder, $field, Filter::CONDITION_GTE, current($value)));
@@ -83,6 +86,24 @@ class GenericType implements TypeInterface
                 $queryBuilder->setParameter($parameter, $value);
 
                 return $expr->notLike($field, $parameter);
+                break;
+            case Filter::CONDITION_CONTAINS:
+                return $this->addFilter($queryBuilder, $field, Filter::CONDITION_LIKE, "%$value%");
+                break;
+            case Filter::CONDITION_NOT_CONTAINS:
+                return $this->addFilter($queryBuilder, $field, Filter::CONDITION_NOT_LIKE, "%$value%");
+                break;
+            case Filter::CONDITION_STARTS_WITH:
+                return $this->addFilter($queryBuilder, $field, Filter::CONDITION_LIKE, "$value%");
+                break;
+            case Filter::CONDITION_NOT_STARTS_WITH:
+                return $this->addFilter($queryBuilder, $field, Filter::CONDITION_NOT_LIKE, "$value%");
+                break;
+            case Filter::CONDITION_ENDS_WITH:
+                return $this->addFilter($queryBuilder, $field, Filter::CONDITION_LIKE, "%$value");
+                break;
+            case Filter::CONDITION_NOT_ENDS_WITH:
+                return $this->addFilter($queryBuilder, $field, Filter::CONDITION_NOT_LIKE, "%$value");
                 break;
             case Filter::CONDITION_NULL:
                 if ($value) {
