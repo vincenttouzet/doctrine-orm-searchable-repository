@@ -13,6 +13,7 @@ namespace SAF\SearchableRepository\Types;
 
 use Doctrine\ORM\QueryBuilder;
 use SAF\SearchableRepository\Exception\ConditionNotSupportedException;
+use SAF\SearchableRepository\Filter;
 
 class GenericType implements TypeInterface
 {
@@ -31,66 +32,66 @@ class GenericType implements TypeInterface
         $parameter = sprintf(':%s_%s_value', str_replace('.', '_', $field), $condition);
         $expr = $queryBuilder->expr();
         switch ($condition) {
-            case 'eq':
+            case Filter::CONDITION_EQ:
                 $queryBuilder->setParameter($parameter, $value);
 
                 return $expr->eq($field, $parameter);
                 break;
-            case 'neq':
+            case Filter::CONDITION_NEQ:
                 $queryBuilder->setParameter($parameter, $value);
 
                 return $expr->neq($field, $parameter);
                 break;
-            case 'lt':
+            case Filter::CONDITION_LT:
                 $queryBuilder->setParameter($parameter, $value);
 
                 return $expr->lt($field, $parameter);
                 break;
-            case 'gt':
+            case Filter::CONDITION_GT:
                 $queryBuilder->setParameter($parameter, $value);
 
                 return $expr->gt($field, $parameter);
                 break;
-            case 'lte':
+            case Filter::CONDITION_LTE:
                 $queryBuilder->setParameter($parameter, $value);
 
                 return $expr->lte($field, $parameter);
                 break;
-            case 'gte':
+            case Filter::CONDITION_GTE:
                 $queryBuilder->setParameter($parameter, $value);
 
                 return $expr->gte($field, $parameter);
                 break;
-            case 'like':
+            case Filter::CONDITION_LIKE:
                 $queryBuilder->setParameter($parameter, $value);
 
                 return $expr->like($field, $parameter);
                 break;
-            case 'not_like':
+            case Filter::CONDITION_NOT_LIKE:
                 $queryBuilder->setParameter($parameter, $value);
 
                 return $expr->notLike($field, $parameter);
                 break;
-            case 'null':
+            case Filter::CONDITION_NULL:
                 if ($value) {
                     return $expr->isNull($field);
                 } else {
                     return $expr->isNotNull($field);
                 }
                 break;
-            case 'not_null':
+            case Filter::CONDITION_NOT_NULL:
                 if ($value) {
                     return $expr->isNotNull($field);
                 } else {
                     return $expr->isNull($field);
                 }
                 break;
-            case 'in':
+            case Filter::CONDITION_IN:
                 $queryBuilder->setParameter($parameter, $value);
 
                 return $expr->in($field, $parameter);
                 break;
-            case 'not_in':
+            case Filter::CONDITION_NOT_IN:
                 $queryBuilder->setParameter($parameter, $value);
 
                 return $expr->notIn($field, $parameter);

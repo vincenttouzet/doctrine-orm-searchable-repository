@@ -12,6 +12,7 @@
 namespace SAF\SearchableRepository\Types;
 
 use Doctrine\ORM\QueryBuilder;
+use SAF\SearchableRepository\Filter;
 
 class StringType extends GenericType
 {
@@ -20,12 +21,12 @@ class StringType extends GenericType
         $parameter = sprintf(':%s_%s_value', str_replace('.', '_', $field), $condition);
         $expr = $queryBuilder->expr();
         switch ($condition) {
-            case 'like':
+            case Filter::CONDITION_LIKE:
                 $queryBuilder->setParameter($parameter, $value);
 
                 return $expr->like($expr->lower($field), $expr->lower($parameter));
                 break;
-            case 'not_like':
+            case Filter::CONDITION_NOT_LIKE:
                 $queryBuilder->setParameter($parameter, $value);
 
                 return $expr->notLike($expr->lower($field), $expr->lower($parameter));
