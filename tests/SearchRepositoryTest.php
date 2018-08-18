@@ -16,13 +16,28 @@ use Tests\SAF\SearchableRepository\Entity\Book;
 
 class SearchRepositoryTest extends AbstractTest
 {
-    public function testSearchByAssociation()
+    public function testSearchByAssociationFields()
     {
         $repository = $this->getEntityRepository(Book::class);
 
         $books = $repository->search([
             'author.firstName' => 'Lewis',
             'author.lastName' => 'Carroll',
+        ]);
+
+        $this->assertEquals(1, count($books), 'There must be 1 book written by Lewis Carroll');
+    }
+
+    public function testSearchByAssociationEntity()
+    {
+        $author = $this->getEntityRepository(Author::class)->findOneBy([
+            'firstName' => 'Lewis',
+            'lastName' => 'Carroll',
+        ]);
+        $repository = $this->getEntityRepository(Book::class);
+
+        $books = $repository->search([
+            'author' => $author,
         ]);
 
         $this->assertEquals(1, count($books), 'There must be 1 book written by Lewis Carroll');

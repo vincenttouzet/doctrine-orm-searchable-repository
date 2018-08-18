@@ -134,7 +134,11 @@ trait SearchableRepositoryTrait
 
         foreach ($filters as $field => $filter) {
             // full notation ?
-            $fields[] = $filter['field'] ?? $field;
+            if (is_array($filter) && isset($filter['field'])) {
+                $fields[] = $filter['field'];
+            } else {
+                $fields[] = $field;
+            }
         }
 
         return $fields;
