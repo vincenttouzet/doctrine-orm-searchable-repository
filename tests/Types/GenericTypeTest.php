@@ -39,7 +39,7 @@ class GenericTypeTest extends AbstractTest
             'lastName' => ['neq' => 'Carroll'],
         ]);
 
-        $this->assertEquals(9, count($authors), 'There must be 9 author not named "Lewis Carroll"');
+        $this->assertEquals(10, count($authors), 'There must be 10 author not named "Lewis Carroll"');
     }
 
     public function testLikeCondition()
@@ -63,7 +63,7 @@ class GenericTypeTest extends AbstractTest
             'lastName' => ['not_like' => 'Car%ll'],
         ]);
 
-        $this->assertEquals(9, count($authors), 'There must be 9 author not named "Lewis Carroll"');
+        $this->assertEquals(10, count($authors), 'There must be 10 author not named "Lewis Carroll"');
     }
 
     public function testLtCondition()

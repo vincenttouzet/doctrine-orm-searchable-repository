@@ -12,6 +12,7 @@
 namespace Tests\SAF\SearchableRepository;
 
 
+use Tests\SAF\SearchableRepository\Entity\Author;
 use Tests\SAF\SearchableRepository\Entity\Book;
 
 class SearchRepositoryTest extends AbstractTest
@@ -26,6 +27,21 @@ class SearchRepositoryTest extends AbstractTest
         ]);
 
         $this->assertEquals(1, count($books), 'There must be 1 book written by Lewis Carroll');
+    }
+
+    public function testSearchMultipleField()
+    {
+        $repository = $this->getEntityRepository(Author::class);
+
+        $authors = $repository->search([
+            'name' => [
+                'field' => ['firstName', 'lastName'],
+                'condition' => 'eq',
+                'value' => 'Lewis',
+            ],
+        ]);
+
+        $this->assertEquals(2, count($authors), 'There must be 2 authors named Lewis');
     }
 
     /**

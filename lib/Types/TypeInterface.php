@@ -20,6 +20,8 @@ interface TypeInterface
      * @param string $field
      * @param string $condition
      * @param mixed $value
+     *
+     * @return mixed
      */
     public function addFilter(QueryBuilder $queryBuilder, $field, $condition, $value);
 

@@ -21,15 +21,15 @@ class StringType extends GenericType
         $expr = $queryBuilder->expr();
         switch ($condition) {
             case 'like':
-                $queryBuilder->andWhere($expr->like($expr->lower($field), $expr->lower($parameter)))
-                    ->setParameter($parameter, $value);
+                $queryBuilder->setParameter($parameter, $value);
+                return $expr->like($expr->lower($field), $expr->lower($parameter));
                 break;
             case 'not_like':
-                $queryBuilder->andWhere($expr->notLike($expr->lower($field), $expr->lower($parameter)))
-                    ->setParameter($parameter, $value);
+                $queryBuilder->setParameter($parameter, $value);
+                return $expr->notLike($expr->lower($field), $expr->lower($parameter));
                 break;
             default:
-                parent::addFilter($queryBuilder, $field, $condition, $value);
+                return parent::addFilter($queryBuilder, $field, $condition, $value);
         }
     }
 

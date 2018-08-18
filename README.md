@@ -17,6 +17,30 @@ $orders = [
 $entities = $repository->search($filters, $orders);
 ```
 
+You can even perform search of a value on multiple columns:
+
+```php
+$filters = [
+    'name' => [
+        'field'     => ['firstName', 'lastName],
+        'condition' => 'like',
+        'value'     => '%Lewis%',
+    ],
+];
+
+$orders = [
+    'author.name' => 'ASC',
+    'name'        => 'DESC',
+];
+
+$entities = $repository->search($filters, $orders);
+```
+
+This will result in the following condition :
+
+```sql
+firstName like '%Lewis%' OR lastName like '%Lewis%'
+```
 
 ## How to use
 

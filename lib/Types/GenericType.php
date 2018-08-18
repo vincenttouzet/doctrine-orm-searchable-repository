@@ -21,6 +21,7 @@ class GenericType implements TypeInterface
      * @param string $field
      * @param string $condition
      * @param mixed $value
+     * @return mixed
      * @throws ConditionNotSupportedException
      */
     public function addFilter(QueryBuilder $queryBuilder, $field, $condition, $value)
@@ -29,58 +30,58 @@ class GenericType implements TypeInterface
         $expr = $queryBuilder->expr();
         switch ($condition) {
             case 'eq':
-                $queryBuilder->andWhere($expr->eq($field, $parameter))
-                    ->setParameter($parameter, $value);
+                $queryBuilder->setParameter($parameter, $value);
+                return $expr->eq($field, $parameter);
                 break;
             case 'neq':
-                $queryBuilder->andWhere($expr->neq($field, $parameter))
-                    ->setParameter($parameter, $value);
+                $queryBuilder->setParameter($parameter, $value);
+                return $expr->neq($field, $parameter);
                 break;
             case 'lt':
-                $queryBuilder->andWhere($expr->lt($field, $parameter))
-                    ->setParameter($parameter, $value);
+                $queryBuilder->setParameter($parameter, $value);
+                return $expr->lt($field, $parameter);
                 break;
             case 'gt':
-                $queryBuilder->andWhere($expr->gt($field, $parameter))
-                    ->setParameter($parameter, $value);
+                $queryBuilder->setParameter($parameter, $value);
+                return $expr->gt($field, $parameter);
                 break;
             case 'lte':
-                $queryBuilder->andWhere($expr->lte($field, $parameter))
-                    ->setParameter($parameter, $value);
+                $queryBuilder->setParameter($parameter, $value);
+                return $expr->lte($field, $parameter);
                 break;
             case 'gte':
-                $queryBuilder->andWhere($expr->gte($field, $parameter))
-                    ->setParameter($parameter, $value);
+                $queryBuilder->setParameter($parameter, $value);
+                return $expr->gte($field, $parameter);
                 break;
             case 'like':
-                $queryBuilder->andWhere($expr->like($field, $parameter))
-                    ->setParameter($parameter, $value);
+                $queryBuilder->setParameter($parameter, $value);
+                return $expr->like($field, $parameter);
                 break;
             case 'not_like':
-                $queryBuilder->andWhere($expr->notLike($field, $parameter))
-                    ->setParameter($parameter, $value);
+                $queryBuilder->setParameter($parameter, $value);
+                return $expr->notLike($field, $parameter);
                 break;
             case 'null':
                 if ($value) {
-                    $queryBuilder->andWhere($expr->isNull($field));
+                    return $expr->isNull($field);
                 } else {
-                    $queryBuilder->andWhere($expr->isNotNull($field));
+                    return $expr->isNotNull($field);
                 }
                 break;
             case 'not_null':
                 if ($value) {
-                    $queryBuilder->andWhere($expr->isNotNull($field));
+                    return $expr->isNotNull($field);
                 } else {
-                    $queryBuilder->andWhere($expr->isNull($field));
+                    return $expr->isNull($field);
                 }
                 break;
             case 'in':
-                $queryBuilder->andWhere($expr->in($field, $parameter))
-                    ->setParameter($parameter, $value);
+                $queryBuilder->setParameter($parameter, $value);
+                return $expr->in($field, $parameter);
                 break;
             case 'not_in':
-                $queryBuilder->andWhere($expr->notIn($field, $parameter))
-                    ->setParameter($parameter, $value);
+                $queryBuilder->setParameter($parameter, $value);
+                return $expr->notIn($field, $parameter);
                 break;
             default:
                 throw new ConditionNotSupportedException($condition, self::class);

@@ -5,6 +5,9 @@ Tests\SAF\SearchableRepository\Entity\Author:
     author{2..10}:
         firstName: <firstName()>
         lastName: <lastName()>
+    roy_lewis:
+        firstName: Roy
+        lastName: Lewis
 
 Tests\SAF\SearchableRepository\Entity\Type:
     novel:
