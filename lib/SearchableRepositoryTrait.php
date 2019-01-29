@@ -158,6 +158,7 @@ trait SearchableRepositoryTrait
      */
     protected function getFieldMappings(QueryBuilder $queryBuilder, $field, ClassMetadataInfo $classMetadata, $previous = 'main')
     {
+        $previousAlias = str_replace('.', '_', $previous);
         $fieldMappings = [];
         if (is_array($field)) {
             foreach ($field as $f) {
@@ -177,8 +178,8 @@ trait SearchableRepositoryTrait
                 throw new AssociationNotFoundException($classMetadata->getName(), $associationName);
             }
             // add join if not already
-            if (!$this->hasJoinInQueryBuilder($queryBuilder, $previous.'_'.$associationName, $previous)) {
-                $queryBuilder->innerJoin($previous.'.'.$associationName, $previous.'_'.$associationName);
+            if (!$this->hasJoinInQueryBuilder($queryBuilder, $previousAlias.'_'.$associationName, $previousAlias)) {
+                $queryBuilder->innerJoin($previousAlias.'.'.$associationName, $previousAlias.'_'.$associationName);
             }
             $association = $classMetadata->getAssociationMapping($associationName);
             $associationClassMetadata = $this->getEntityManager()->getClassMetadata($association['targetEntity']);
@@ -197,12 +198,12 @@ trait SearchableRepositoryTrait
             if ($classMetadata->hasField($field)) {
                 $fieldMappings[$previous.'.'.$field] = [
                     'mapping' => $classMetadata->getFieldMapping($field),
-                    'queryAlias' => str_replace('.', '_', $previous).'.'.$field,
+                    'queryAlias' => $previousAlias.'.'.$field,
                 ];
             } elseif ($classMetadata->hasAssociation($field)) {
                 $fieldMappings[$previous.'.'.$field] = [
                     'mapping' => $classMetadata->getAssociationMapping($field),
-                    'queryAlias' => str_replace('.', '_', $previous).'.'.$field,
+                    'queryAlias' => $previousAlias.'.'.$field,
                 ];
             } else {
                 throw new FieldOrAssociationNotFoundException($classMetadata->getName(), $field);
